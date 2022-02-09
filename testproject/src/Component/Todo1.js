@@ -19,15 +19,27 @@ function Todo1(props) {
   const [search, setsearch] = React.useState(``);
   const isEnable = false;
 
+  const generateKey = (pre) => {
+    return `${ pre }_${ new Date().getTime() }`;
+  
+  }
+
   const setItem = (event) => {
     if (event != "" && event != undefined) {
-      setArr([...arr, event])
+      const updateUsers = [
+        // copy the current users state
+        ...arr,
+        // now you can add a new object to add to the array
+        {id: generateKey(event), name: event}
+      ];
+      setArr(updateUsers)
     }
+    console.log(arr)
   }
 
   const deleteList = (id) => {
     const newList = arr.filter((item) => {
-      return item != id;
+      return item.name != id.name;
     })
     setArr(newList)
   }
@@ -38,7 +50,7 @@ function Todo1(props) {
 
   const updateList = (val, index) => {
     let newList = [...arr];
-    newList[index] = val;
+    newList[index].name = val;
     setArr(newList)
   }
 
@@ -52,17 +64,17 @@ function Todo1(props) {
         <Grid item xs={12} md={12}>
           <Demo className="Todo_listContainer">
             <List >
-              {arr.length > 0 && arr.filter(li => li?.toLowerCase().includes(search?.toLowerCase())).map((subIndex, indexVal) => {
+              {arr.length > 0 && arr.filter(li => li.name?.toLowerCase().includes(search?.toLowerCase())).map((subIndex, indexVal) => {
                 return (
                   <ListItem
-                    key={subIndex}
+                    key={subIndex.id}
                     sx={{ boxShadow: 2 }}
                     className="border"
                   >
                     <ListItemText
-                      primary={subIndex}
+                      primary={subIndex.name}
                     />
-                    <ResponsiveDialog setItem1={updateList} btnCss="Todo_addBtn" name="Edit" curVal={subIndex} id={indexVal} />
+                    <ResponsiveDialog setItem1={updateList} btnCss="Todo_addBtn" name="Edit" curVal={subIndex.name} id={indexVal} />
                     <Button variant="contained" onClick={() => deleteList(subIndex)} className="Todo_deleteBtn">
                       Delete
                     </Button>

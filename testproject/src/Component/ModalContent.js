@@ -17,6 +17,7 @@ export default function ResponsiveDialog(props) {
 
     const handleClickOpen = () => {
         setOpen(true);
+        setinputVal(props.curVal)
     };
 
     const handleClose = () => {
